@@ -70,17 +70,17 @@ def get_dir(request, machine_name, path):
 
         # import pdb; pdb.set_trace()
         # Split the lines
-        output = map(lambda i: i.strip(), output.split('\n'))
+        output = [i.strip() for i in output.split('\n')]
 
         # "awesome" regular expression that captures ls output of the form:
         # drwxrwxr-x   4  shreyas     newt        32768 Apr 15 10:59 home
         patt=re.compile(r'(?P<perms>[\+\w@-]{10,})\s+(?P<hardlinks>\d+)\s+(?P<user>\S+)\s+(?P<group>\S+)\s+(?P<size>\d+)\s+(?P<date>\w{3}\s+\d+\s+[\d\:]+)\s+(?P<name>.+)$')
 
         # filter out stuff that doesn't match pattern
-        output = filter(lambda line: patt.match(line), output)
+        output = [line for line in output if patt.match(line)]
 
         # Convert output into dict from group names
-        output = map(lambda x: patt.match(x).groupdict(), output)
+        output = [patt.match(x).groupdict() for x in output]
 
         for line in output:
             if line['perms'].startswith('l'):

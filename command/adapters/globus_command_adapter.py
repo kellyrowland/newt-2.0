@@ -52,7 +52,7 @@ def get_systems(request):
     """Returns a list of all machines available to run commands on
     """
     systems = []
-    for (machine, attr) in gridutil.GRID_RESOURCE_TABLE.iteritems():
+    for (machine, attr) in gridutil.GRID_RESOURCE_TABLE.items():
         if 'fork' in attr['jobmanagers']:
             systems.append(machine)
     return systems

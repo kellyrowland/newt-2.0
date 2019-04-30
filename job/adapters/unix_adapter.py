@@ -28,7 +28,7 @@ def view_queue(request, machine_name):
     (output, error, retcode) = run_command("ps -aj")
     patt = re.compile(r'(?P<user>[^\s]+)\s+(?P<jobid>\d+)\s+(?P<ppid>\d+)\s+(?P<pgid>\d+)\s+(?P<sess>\d+)\s+(?P<jobc>\d+)\s+(?P<status>[^\s]+)\s+(?P<tt>[^\s]+)\s+(?P<timeuse>[^\s]+)\s+(?P<command>.+)')
     processes = output.splitlines()[1:]
-    processes = map(lambda x: patt.match(x).groupdict(), processes)
+    processes = [patt.match(x).groupdict() for x in processes]
     return processes
 
 
@@ -45,16 +45,16 @@ def submit_job(request, machine_name):
             f = open(request.POST.get("jobfile"), 'r')
             data = f.read()
         except Exception as e:
-            return json_response(status="ERROR", 
-                                 status_code=400, 
+            return json_response(status="ERROR",
+                                 status_code=400,
                                  error="Unable to open job file. Be sure you gave an absolute path.")
         finally:
             f.close()
     elif request.POST.get("jobscript", False):
         data = request.POST.get("jobscript")
     else:
-        return json_response(status="ERROR", 
-                             status_code=400, 
+        return json_response(status="ERROR",
+                             status_code=400,
                              error="No data received")
 
     # Generate unique outfile name
@@ -69,7 +69,7 @@ def submit_job(request, machine_name):
     # Get/return the job_id from stdout
     job_id = job.stdout.readline().rstrip()
     logger.debug("Spawned process: %s" % job_id)
-    return {"jobid": job_id}    
+    return {"jobid": job_id}
 
 
 def get_info(request, machine_name, job_id):
@@ -111,7 +111,7 @@ def get_info(request, machine_name, job_id):
         "time_used": str(time_used),
         "output": output
     }
-    return info    
+    return info
 
 
 def delete_job(request, machine_name, job_id):

@@ -36,7 +36,7 @@ def get_store(request):
     request -- Django HttpRequest object
     """
     db = MongoClient()['store']
-    return filter(lambda s: s!="system.indexes", db.collection_names())
+    return [s for s in db.collection_names() if s!="system.indexes"]
 
 def create_store(request, store_name=None, initial_data=[]):
     """Creates a store with the given store_name and initial_data; Returns a 

@@ -41,7 +41,7 @@ class FileTests(TestCase):
         self.assertEqual(json_response['output']['location'], "/tmp/tmp_newt_2.txt")
         r = self.client.get(newt_base_url+'/file/'+machine+'/tmp/tmp_newt_2.txt?download=true')
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(r.streaming_content.next(), rand_string)
+        self.assertEqual(next(r.streaming_content), rand_string)
         try:
             os.remove("/tmp/tmp_newt_2.txt")
         except Exception:

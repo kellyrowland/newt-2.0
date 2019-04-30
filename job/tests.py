@@ -24,7 +24,7 @@ class JobTests(TestCase):
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertTrue(len(json_response['output']) > 0)
-        self.assertIn(machine, json_response['output'].keys())
+        self.assertIn(machine, list(json_response['output'].keys()))
 
     def test_running_cmds(self):
 

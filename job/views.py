@@ -1,7 +1,7 @@
 from newt.views import JSONRestView
 from common.response import json_response
 from django.conf import settings
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 from importlib import import_module
 job_adapter = import_module(settings.NEWT_CONFIG['ADAPTERS']['JOB']['adapter'])
