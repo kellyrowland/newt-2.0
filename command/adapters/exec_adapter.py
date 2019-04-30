@@ -1,13 +1,17 @@
+from django.conf import settings
 from common.shell import run_command
 from common.response import json_response
 import logging
 logger = logging.getLogger("newt." + __name__)
 
-
 def execute(request, machine_name, command):
+    conf = settings.NEWT_CONFIG
+    for s in conf['SYSTEMS']:
+        if machine_name == s['NAME']:
+            hostname = s['HOSTNAME']
+            break
     try:
-        logger.debug("Running command: %s" % command)
-        (output, error, retcode) = run_command(command)
+        (output, error, retcode) = run_command(command,hostname)
         response = {
             'output': output,
             'error': error,

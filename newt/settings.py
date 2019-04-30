@@ -232,6 +232,7 @@ ALLOWED_CIDRS = ['128.3.0.0/16', '131.243.0.0/16', '128.55.0.0/16', '198.128.0.0
 NEWT_CONFIG = {
     'SYSTEMS': [
         {'NAME': 'localhost', 'HOSTNAME': 'localhost'},
+        {'NAME': 'cori', 'HOSTNAME': 'cori.nersc.gov'},
     ],
     'ADAPTERS': {
         'STATUS': {
