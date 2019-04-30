@@ -2,7 +2,7 @@
 from django import http
 import logging
 from django.conf import settings
-from urlparse import urlparse
+from urllib.parse import urlparse
 from netaddr import all_matching_cidrs
 from socket import gethostbyname
 
@@ -34,7 +34,7 @@ def check_xs_allowed(url):
             return True
         else:
             return False
-    except Exception, e:
+    except Exception as e:
         logger.warn("Failed lookup on %s: " % hostname)
         return False
 

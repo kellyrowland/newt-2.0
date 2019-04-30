@@ -56,7 +56,7 @@ def get_store_contents(request, store_name):
     request -- Django HttpRequest object
     store_name -- the name of the store
     """
-   pass
+    pass
 
 def query_store(request, store_name, query):
     """Queries the store; Returns the result of the query in the form of:

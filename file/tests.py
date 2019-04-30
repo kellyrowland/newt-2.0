@@ -17,31 +17,31 @@ class FileTests(TestCase):
 
     def test_root(self):
         r = self.client.get(newt_base_url+'/file')
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
         json_response = r.json()
-        self.assertEquals(json_response['status'], "OK")
+        self.assertEqual(json_response['status'], "OK")
         self.assertIn(machine, json_response['output'])
         
     def test_getdir(self):        
         r = self.client.get(newt_base_url+'/file/'+machine+"/")
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
 
         json_response = r.json()
-        self.assertEquals(json_response['status'], "OK")
+        self.assertEqual(json_response['status'], "OK")
         
         self.assertTrue(len(json_response['output']) >= 2)
-        self.assertEquals(json_response['output'][0]['name'], ".")
-        self.assertEquals(json_response['output'][1]['name'], "..")
+        self.assertEqual(json_response['output'][0]['name'], ".")
+        self.assertEqual(json_response['output'][1]['name'], "..")
         
     def test_uploadfile(self):
         rand_string = '%010x' % random.randrange(16**10)
         r = self.client.put(newt_base_url + "/file/"+machine+"/tmp/tmp_newt_2.txt", data=rand_string)
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
-        self.assertEquals(json_response['output']['location'], "/tmp/tmp_newt_2.txt")
+        self.assertEqual(json_response['output']['location'], "/tmp/tmp_newt_2.txt")
         r = self.client.get(newt_base_url+'/file/'+machine+'/tmp/tmp_newt_2.txt?download=true')
-        self.assertEquals(r.status_code, 200)
-        self.assertEquals(r.streaming_content.next(), rand_string)
+        self.assertEqual(r.status_code, 200)
+        self.assertEqual(r.streaming_content.next(), rand_string)
         try:
             os.remove("/tmp/tmp_newt_2.txt")
         except Exception:

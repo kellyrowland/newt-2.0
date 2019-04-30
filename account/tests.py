@@ -14,16 +14,16 @@ class AcctTests(TestCase):
         self.client.post(newt_base_url + "/auth", data=login)
 
         r = self.client.get(newt_base_url + "/account/user/%s/" % login['username'])
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
         json_response = r.json()
-        self.assertEquals(json_response['output']['username'], login['username'])
+        self.assertEqual(json_response['output']['username'], login['username'])
 
         r = self.client.get(newt_base_url + "/account/user/id/2/")
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
         json_response = r.json()
-        self.assertEquals(json_response['output']['username'], login['username'])
+        self.assertEqual(json_response['output']['username'], login['username'])
 
         r = self.client.get(newt_base_url + "/account/group/id/1/")
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
         json_response = r.json()
-        self.assertEquals(json_response['output']['name'], "Test Group")
+        self.assertEqual(json_response['output']['name'], "Test Group")

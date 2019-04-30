@@ -22,7 +22,7 @@ def alarm_handler(signum, frame):
 # initialization code
 try:
     signal.signal(signal.SIGALRM, alarm_handler)
-except ValueError,e:
+except ValueError as e:
     logger.warning('setting alarm handler failed: "%s"' %e)
 
 
@@ -30,7 +30,7 @@ def run_command(command, env=None, timeout=600):
     args = shlex.split(smart_str(command))
     try:
         p = Popen(args, stdout=PIPE, stderr=PIPE, env=env)
-    except OSError, ex:
+    except OSError as ex:
         logger.error('running command failed: "%s", OSError "%s"' %(' '.join(args), ex))
         raise ex
     

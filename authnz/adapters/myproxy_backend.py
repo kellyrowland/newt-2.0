@@ -49,7 +49,7 @@ def create_cert_req(keyType = crypto.TYPE_RSA,
         if ssl_version.startswith("OpenSSL 1"):
             key_pem = re.sub(r'BEGIN PRIVATE KEY', r'BEGIN RSA PRIVATE KEY', key_pem)
             key_pem = re.sub(r'END PRIVATE KEY', r'END RSA PRIVATE KEY', key_pem)
-    except Exception, e:
+    except Exception as e:
         logger.warn('Using older version of openSSL without SSLeay_version: %s' + e)
     
     return (cert_req_pem, key_pem)
@@ -215,7 +215,7 @@ class MyProxyBackend:
             credentials = myproxy_logon(settings.MYPROXY_SERVER, 
                                         username, password, None, 
                                         lifetime=settings.NEWT_COOKIE_LIFETIME+10800)
-        except Exception, e:
+        except Exception as e:
             logger.debug("MyProxy Exception: %s" % e)            
             return None
         if credentials == None:

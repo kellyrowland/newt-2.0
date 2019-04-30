@@ -32,20 +32,20 @@ class BasicTests(TestCase):
         test basic root URI
         """
         r = self.client.get(newt_base_url)
-        self.assertEquals(r.status_code, 200)
+        self.assertEqual(r.status_code, 200)
 
         json_response = r.json()
-        self.assertEquals(json_response['status'], "OK")
-        self.assertEquals(json_response['status_code'], 200)
-        self.assertEquals(json_response['error'], "")
+        self.assertEqual(json_response['status'], "OK")
+        self.assertEqual(json_response['status_code'], 200)
+        self.assertEqual(json_response['error'], "")
         self.assertTrue(json_response['output']['version'], settings.NEWT_VERSION)
-        self.assertEquals(r.headers['content-type'], 'application/json')
+        self.assertEqual(r.headers['content-type'], 'application/json')
 
 
     def test_error(self):
         r = self.client.post(newt_base_url)
-        self.assertEquals(r.status_code, 501)
+        self.assertEqual(r.status_code, 501)
 
         json_response = r.json()
-        self.assertEquals(json_response['status'], "ERROR")
+        self.assertEqual(json_response['status'], "ERROR")
         
