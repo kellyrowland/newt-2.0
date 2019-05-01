@@ -144,7 +144,7 @@ INSTALLED_APPS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'authnz.adapters.sshapi_backend.SSHAPIBackend',
+    'django.contrib.auth.backends.ModelBackend',
 )
 
 
@@ -215,6 +215,7 @@ NEWT_VERSION = '2.0.0'
 NEWT_HOST = 'localhost'
 NEWT_DOMAIN = 'nersc.gov'
 NEWT_COOKIE_LIFETIME = 43200
+MYPROXY_SERVER = 'nerscca2.nersc.gov'
 SSHPROXY_SERVER = 'https://sshproxy.nersc.gov/create_pair/default/'
 
 # SESSION_COOKIE_DOMAIN = NEWT_HOST
@@ -244,8 +245,8 @@ NEWT_CONFIG = {
             'models': "",
         },
         'AUTH': {
-            'adapter': 'authnz.adapters.sshapi_adapter',
-            'models': 'authnz.adapters.sshapi_models',
+            'adapter': 'authnz.adapters.dbauth_adapter',
+            'models': '',
         },
         'COMMAND': {
             'adapter': 'command.adapters.exec_adapter',
