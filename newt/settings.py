@@ -216,7 +216,7 @@ NEWT_HOST = 'localhost'
 NEWT_DOMAIN = 'nersc.gov'
 NEWT_COOKIE_LIFETIME = 43200
 MYPROXY_SERVER = 'nerscca2.nersc.gov'
-
+SSHPROXY_SERVER = 'https://sshproxy.nersc.gov/create_pair/default/'
 
 # SESSION_COOKIE_DOMAIN = NEWT_HOST
 # SESSION_COOKIE_SECURE = True
@@ -233,6 +233,7 @@ ALLOWED_CIDRS = ['128.3.0.0/16', '131.243.0.0/16', '128.55.0.0/16', '198.128.0.0
 NEWT_CONFIG = {
     'SYSTEMS': [
         {'NAME': 'localhost', 'HOSTNAME': 'localhost'},
+        {'NAME': 'cori', 'HOSTNAME': 'cori.nersc.gov'},
     ],
     'ADAPTERS': {
         'STATUS': {

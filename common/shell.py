@@ -1,3 +1,4 @@
+import subprocess
 from subprocess import PIPE, Popen
 import shlex
 import re
@@ -26,10 +27,10 @@ except ValueError,e:
     logger.warning('setting alarm handler failed: "%s"' %e)
 
 
-def run_command(command, env=None, timeout=600):
-    args = shlex.split(smart_str(command))
+def run_command(command, hostname=None, timeout=600):
+    args = ["ssh", "%s" % hostname, smart_str(command)]
     try:
-        p = Popen(args, stdout=PIPE, stderr=PIPE, env=env)
+        p = Popen(args, shell=False, stdout=PIPE, stderr=PIPE)
     except OSError, ex:
         logger.error('running command failed: "%s", OSError "%s"' %(' '.join(args), ex))
         raise ex
