@@ -49,7 +49,7 @@ def create_cert_req(keyType = crypto.TYPE_RSA,
         if ssl_version.startswith("OpenSSL 1"):
             key_pem = re.sub(r'BEGIN PRIVATE KEY', r'BEGIN RSA PRIVATE KEY', key_pem)
             key_pem = re.sub(r'END PRIVATE KEY', r'END RSA PRIVATE KEY', key_pem)
-    except Exception, e:
+    except Exception as e:
         logger.warn('Using older version of openSSL without SSLeay_version: %s' + e)
     
     return (cert_req_pem, key_pem)
@@ -64,13 +64,13 @@ def deserialize_response(msg):
     lines = msg.split('\n')
     
     # get response value
-    responselines = filter( lambda x: x.startswith('RESPONSE'), lines)
+    responselines = [x for x in lines if x.startswith('RESPONSE')]
     responseline = responselines[0]
     response = int(responseline.split('=')[1])
     
     # get error text
     errortext = ""
-    errorlines = filter( lambda x: x.startswith('ERROR'), lines)
+    errorlines = [x for x in lines if x.startswith('ERROR')]
     for e in errorlines:
         etext = e.split('=')[1]
         errortext += etext
@@ -124,7 +124,7 @@ def myproxy_logon(hostname,username,passphrase,outfile,lifetime=43200,port=7512)
     # disable for compatibility with myproxy server (er, globus)
     # globus doesn't handle this case, apparently, and instead
     # chokes in proxy delegation code
-    context.set_options(0x00000800L)
+    context.set_options(0x00000800)
     
     # connect to myproxy server
     logger.debug("connect to myproxy server %s" %hostname)
@@ -215,7 +215,7 @@ class MyProxyBackend:
             credentials = myproxy_logon(settings.MYPROXY_SERVER, 
                                         username, password, None, 
                                         lifetime=settings.NEWT_COOKIE_LIFETIME+10800)
-        except Exception, e:
+        except Exception as e:
             logger.debug("MyProxy Exception: %s" % e)            
             return None
         if credentials == None:
@@ -228,7 +228,7 @@ class MyProxyBackend:
             email = "%s@%s" % (username, settings.NEWT_DOMAIN)
             try:
                 myuser = User.objects.create_user(username, email)
-            except Exception,ex:
+            except Exception as ex:
                 logger.error(ex)
                 raise ex
 

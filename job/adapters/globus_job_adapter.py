@@ -30,7 +30,7 @@ def get_machines(request):
     request - Django HttpRequest
     """
     machines = {}
-    for (machine, attrs) in gridutil.GRID_RESOURCE_TABLE.iteritems():
+    for (machine, attrs) in gridutil.GRID_RESOURCE_TABLE.items():
         if attrs['jobmanagers'] != {}:
             machines[machine] = attrs['jobmanagers']
     return machines
@@ -56,10 +56,10 @@ def view_queue(request, machine_name):
     # filter out stuff that doesn't match pattern
     output = output.splitlines()
     output = [x.strip() for x in output]
-    output = filter(lambda line: patt.match(line), output)
+    output = [line for line in output if patt.match(line)]
 
     # Convert output into dict from group names
-    output = map(lambda x: patt.match(x).groupdict(), output)
+    output = [patt.match(x).groupdict() for x in output]
 
     return output
 
@@ -112,7 +112,7 @@ def submit_job(request, machine_name):
     try:
         runner = GlobusHelper(request.user)
         (output, error, retcode) = runner.run_job(cmd, jobmanager, flags)
-    except Exception, ex:
+    except Exception as ex:
         return json_response(status="ERROR", 
                              status_code=500, 
                              error="qsub failed with error: %s" % str(ex))
@@ -144,10 +144,10 @@ def get_info(request, machine_name, job_id):
     # filter out stuff that doesn't match pattern
     output = output.splitlines()
     output = [x.strip() for x in output]
-    output = filter(lambda line: patt.match(line), output)
+    output = [line for line in output if patt.match(line)]
 
     # Convert output into dict from group names
-    output = map(lambda x: patt.match(x).groupdict(), output)[0]
+    output = [patt.match(x).groupdict() for x in output][0]
 
     return output
 
@@ -180,7 +180,7 @@ def delete_job(request, machine_name, job_id):
     try:
         runner = GlobusHelper(request.user)
         (output, error, retcode) = runner.run_job(cmd, jobmanager, flags)
-    except Exception, ex:
+    except Exception as ex:
         return json_response(status="ERROR", 
                              status_code=500, 
                              error="qsub failed with error: %s" % str(ex))

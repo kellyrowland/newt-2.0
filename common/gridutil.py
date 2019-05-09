@@ -1,6 +1,6 @@
 import shlex
 import os
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import re
 from authnz.models import Cred
 import logging
@@ -97,7 +97,7 @@ def get_cred_env(user):
     """
     def create_cert(path, data):
         logger.debug("Creating x509 cert in directory: %s" % path)
-        oldmask=os.umask(077)
+        oldmask=os.umask(0o77)
         f = file(path,'w')
         f.write(data)
         f.close()
@@ -119,7 +119,7 @@ def get_cred_env(user):
     env['GLOBUS_TCP_PORT_RANGE'] = GLOBUS_CONF['TCP_PORT_RANGE']
     # env['GLOBUS_HOSTNAME'] = GLOBUS_CONF['HOSTNAME']
 
-    if env.has_key('LD_LIBRARY_PATH'):        
+    if 'LD_LIBRARY_PATH' in env:        
         env['LD_LIBRARY_PATH'] = GLOBUS_CONF['LIB_PATH'] + ":" + env['LD_LIBRARY_PATH']
     else:
         env['LD_LIBRARY_PATH'] = GLOBUS_CONF['LIB_PATH']
@@ -128,8 +128,8 @@ def get_cred_env(user):
 
 def get_grid_path(machine, path):
     hostname = GRID_RESOURCE_TABLE[machine].get('hostname', machine)
-    path = urllib.unquote(path)
-    path = urllib.pathname2url(path)
+    path = urllib.parse.unquote(path)
+    path = urllib.request.pathname2url(path)
     if not is_sanitized(path):
         raise ValueError("Bad Pathname")
     return "gsiftp://" + hostname + path

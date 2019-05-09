@@ -14,7 +14,7 @@ import logging
 logger = logging.getLogger("newt." + __name__)
 
 import json
-from dbstore_models import *
+from .dbstore_models import *
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
 import uuid, random, string
 
