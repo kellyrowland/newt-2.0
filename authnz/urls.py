@@ -1,10 +1,9 @@
-from django.conf.urls import patterns
-
+from django.conf.urls import url
 from authnz.views import AuthView, ExtraAuthView
 
 
-urlpatterns = patterns('auth.views',
-    (r'^/?$', AuthView.as_view()),
-    (r'^(?P<query>.+)/$', ExtraAuthView.as_view()),
-)
+urlpatterns = [
+    url(r'^$', AuthView.as_view()),
+    url(r'^(?P<query>.+)/$', ExtraAuthView.as_view()),
+]
     

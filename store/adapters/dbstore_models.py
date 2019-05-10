@@ -18,14 +18,14 @@ def pre_store_rm(sender, instance, using, **kwargs):
 class Document(models.Model):
     oid = models.PositiveIntegerField()
     data = models.TextField()
-    store = models.ForeignKey(Store, related_name="documents")
+    store = models.ForeignKey(Store, related_name="documents", on_delete=models.CASCADE)
 
     class Meta:
         app_label = 'store'
 
 class Permission(models.Model):
-    user = models.ForeignKey(User, related_name="store_perms")
-    store = models.ForeignKey(Store, related_name='perms')
+    user = models.ForeignKey(User, related_name="store_perms", on_delete=models.CASCADE)
+    store = models.ForeignKey(Store, related_name='perms', on_delete=models.CASCADE)
     type = models.CharField(max_length=100, default="r")
 
     class Meta:

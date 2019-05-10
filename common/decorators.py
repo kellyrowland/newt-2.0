@@ -20,7 +20,7 @@ def login_required(view_func):
                                  status_code=500, 
                                  error="Missing request object") 
 
-        if request.user.is_authenticated():
+        if request.user.is_authenticated:
             return view_func(*args, **kwargs)
         else:
             return json_response(status="ERROR", 
