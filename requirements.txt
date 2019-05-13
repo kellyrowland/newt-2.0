@@ -1,5 +1,5 @@
 Django
-netaddr
+django-cors-middleware
 pyOpenSSL
 pymongo
 pytz

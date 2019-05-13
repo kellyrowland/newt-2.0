@@ -24,10 +24,6 @@ DATABASES = {
     }
 }
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -113,15 +109,25 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE = (
+	'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'newt.crossdomain.CORSMiddleware',
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = ( 'POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'HEAD', )
+CORS_ORIGIN_WHITELIST = (
+	'http://128.3.0.0/16',
+	'http://131.243.0.0/16',
+	'http://128.55.0.0/16',
+	'http://198.128.0.0/14',
+	'http://localhost',
+	'http://127.0.0.1',
 )
 
 ROOT_URLCONF = 'newt.urls'
@@ -143,6 +149,7 @@ INSTALLED_APPS = (
     'store',
     'account',
     'job',
+    'corsheaders',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -227,14 +234,6 @@ SSHPROXY_SERVER = 'https://sshproxy.nersc.gov/create_pair/default/'
 # SESSION_COOKIE_DOMAIN = NEWT_HOST
 # SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_NAME = 'newt_sessionid'
-
-# CORS stuff
-# Allow cross site access to newt apps
-XS_SHARING_ALLOWED_ORIGINS = '*'
-XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'HEAD']
-# ALLOWED Networks for cross domain stuff
-ALLOWED_CIDRS = ['128.3.0.0/16', '131.243.0.0/16', '128.55.0.0/16', '198.128.0.0/14']
-# Use ALLOWED_HOSTS (above) to allow specific hostnames not included in ALLOWED_CIDRS
 
 NEWT_CONFIG = {
     'SYSTEMS': [
