@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
 from account.views import *
 
 urlpatterns = [
-    url(r'^user/(?P<user_name>[^/]+)/$', UserInfoView.as_view()),
-    url(r'^user/id/(?P<uid>\d+)/$', UserInfoView.as_view()),
-    url(r'^group/(?P<group_name>[^/]+)/$', GroupInfoView.as_view()),
-    url(r'^group/id/(?P<gid>\d+)/$', GroupInfoView.as_view()),
-    url(r'^(?P<query>.+)/$', ExtraAcctView.as_view()),
+    path('user/<slug:user_name>/', UserInfoView.as_view()),
+    path('user/id/<int:uid>/', UserInfoView.as_view()),
+    path('group/<slug:group_name>/', GroupInfoView.as_view()),
+    path('group/id/<int:gid>/', GroupInfoView.as_view()),
+    path('<str:query>/', ExtraAcctView.as_view()),
 ]
