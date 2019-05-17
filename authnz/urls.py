@@ -1,9 +1,8 @@
-from django.conf.urls import url
+from django.urls import path
 from authnz.views import AuthView, ExtraAuthView
 
-
 urlpatterns = [
-    url(r'^$', AuthView.as_view()),
-    url(r'^(?P<query>.+)/$', ExtraAuthView.as_view()),
+    path('', AuthView.as_view()),
+    path('<str:query>', ExtraAuthView.as_view()),
 ]
     
