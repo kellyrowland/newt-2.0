@@ -216,8 +216,8 @@ LOGGING = {
             'propagate': True,
         },
         'newt': {
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     }
@@ -271,6 +271,8 @@ NEWT_CONFIG = {
         },
     },
 }
+
+APPEND_SLASH = False
 
 try:
     from local_settings import *
