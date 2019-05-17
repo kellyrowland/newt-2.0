@@ -1,10 +1,9 @@
-from django.conf.urls import url
+from django.urls import path
 from file.views import FileView, FileRootView, ExtraFileView
 
-
 urlpatterns = [
-    url(r'^$', FileRootView.as_view()),
-    url(r'^(?P<machine_name>[^/]+)(?P<path>/.*)$', FileView.as_view()),
-    url(r'^(?P<query>.+)/$', ExtraFileView.as_view()),
+    path(r'', FileRootView.as_view()),
+    path(r'file/<slug:machine_name>/<str:path>/', FileView.as_view()),
+    path(r'<str:query>/', ExtraFileView.as_view()),
 ]
     

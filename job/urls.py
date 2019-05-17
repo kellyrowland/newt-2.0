@@ -1,10 +1,9 @@
-from django.conf.urls import url
+from django.urls import path
 from job.views import *
 
 urlpatterns = [
-    url(r'^$', JobRootView.as_view()),
-    url(r'^(?P<machine>[^/]+)/$', JobQueueView.as_view()),
-    url(r'^(?P<machine>[^/]+)/(?P<job_id>[^/]+)/$', JobDetailView.as_view()),
-    url(r'^(?P<query>.+)/$', ExtraJobView.as_view()),
+    path(r'', JobRootView.as_view()),
+    path(r'job/<slug:machine>/', JobQueueView.as_view()),
+    path(r'job/<slug:machine>/<int:job_id>/', JobDetailView.as_view()),
+    path(r'<str:query>/', ExtraJobView.as_view()),
 ]
-    
