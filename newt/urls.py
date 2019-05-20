@@ -1,4 +1,4 @@
-from django.conf.urls import include, url
+from django.urls import include, path
 from newt.views import RootView
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -10,18 +10,18 @@ urlpatterns = [
     # url(r'^newt/', include('newt.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    path(r'admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    url(r'^admin/', admin.site.urls),
+    path(r'admin/', admin.site.urls),
 
-    url(r'^api/?$', RootView.as_view()),
-    url(r'^api/status', include('status.urls')),
-    url(r'^api/file', include('file.urls')),
-    url(r'^api/auth', include('authnz.urls')),
-    url(r'^api/command', include('command.urls')),
-    url(r'^api/store', include('store.urls')),
-    url(r'^api/account', include('account.urls')),
-    url(r'^api/job', include('job.urls')),
+    path(r'api', RootView.as_view()),
+    path(r'api/status', include('status.urls')),
+    path(r'api/file', include('file.urls')),
+    path(r'api/auth', include('authnz.urls')),
+    path(r'api/command', include('command.urls')),
+    path(r'api/store', include('store.urls')),
+    path(r'api/account', include('account.urls')),
+    path(r'api/job', include('job.urls')),
 
 ]
