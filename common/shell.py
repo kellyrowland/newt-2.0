@@ -1,6 +1,5 @@
-from subprocess import PIPE, Popen
+from subprocess import PIPE, run
 import shlex
-import os
 
 import logging
 import signal
@@ -28,32 +27,14 @@ except ValueError as e:
 def run_command(command, env=None, timeout=600):
     args = shlex.split(smart_str(command))
     try:
-        p = Popen(args, stdout=PIPE, stderr=PIPE, env=env)
+        p = run(args, stdout=PIPE, stderr=PIPE, env=env, timeout=timeout)
+        output = p.stdout.decode("utf-8")
+        error = p.stderr.decode("utf-8")
+        retcode = p.returncode
+        logger.debug(p)
+        return (output, error, retcode)
     except OSError as ex:
         logger.error('running command failed: "%s", OSError "%s"' % (' '.join(args), ex))
         raise ex
 
-
-    output = ""
-    error = ""
-    retcode = 0
-
-    # Timeout the call if the proc is hung. Default is 10 min (tweak the value?)
-    signal.alarm(timeout)
-    try:
-        # Note - we can't rely on p.poll() to return a value since this deadlocks when the buffer fills up
-        # p.communicate() will always returns on process completion
-        (output, error) = p.communicate()
-        retcode = p.poll()
-        signal.alarm(0)  # reset the alarm
-    except Alarm:
-        # logger.error('process reached deadline without returning')
-        logger.error('command "%s", reached deadline try to terminate' % (command))
-        os.kill(p.pid, signal.SIGKILL)
-        raise RuntimeError('command "%s", reached deadline and was terminated' % (command))
-    if retcode != 0:
-        # May not want to expose user to error
-        # os.strerror(retcode)
-        logger.warning('command "%s", exit: %d <br> %s' % (command, retcode, error))
-
-    return (str(output, 'utf-8'), str(error, 'utf-8'), retcode)
+    return (output, error, retcode)
