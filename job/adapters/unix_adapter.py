@@ -4,7 +4,7 @@ logger = logging.getLogger("newt." + __name__)
 from common.shell import run_command
 import re
 from bson.objectid import ObjectId
-from subprocess import Popen, PIPE
+from subprocess import Popen, PIPE, run
 from django.conf import settings
 from datetime import datetime
 import pytz
@@ -64,10 +64,11 @@ def submit_job(request, machine_name):
     job_emu = settings.PROJECT_DIR + "/job/adapters/emulate_job_run.sh"
 
     # Run job with the commands in data
-    job = Popen([job_emu, tmp_job_name, request.user.username, data], stdout=PIPE)
+    job = run([job_emu, tmp_job_name, request.user.username, data], stdout=PIPE)
 
     # Get/return the job_id from stdout
-    job_id = job.stdout.readline().rstrip()
+    job_id = job.stdout.decode("utf-8")
+    job_id = job_id.partition("\n")[0]
     logger.debug("Spawned process: %s" % job_id)
     return {"jobid": job_id}
 
