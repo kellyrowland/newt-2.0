@@ -10,18 +10,18 @@ urlpatterns = [
     # url(r'^newt/', include('newt.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:
-    path(r'admin/doc/', include('django.contrib.admindocs.urls')),
+    path('admin/doc/', include('django.contrib.admindocs.urls')),
 
     # Uncomment the next line to enable the admin:
-    path(r'admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
 
-    path(r'api', RootView.as_view()),
-    path(r'api/status', include('status.urls')),
-    path(r'api/file', include('file.urls')),
-    path(r'api/auth', include('authnz.urls')),
-    path(r'api/command', include('command.urls')),
-    path(r'api/store', include('store.urls')),
-    path(r'api/account', include('account.urls')),
-    path(r'api/job', include('job.urls')),
+    path('api', RootView.as_view()),
+    path('api/status', include('status.urls')),
+    path('api/file', include('file.urls')),
+    path('api/auth', include('authnz.urls')),
+    path('api/command', include('command.urls')),
+    path('api/store', include('store.urls')),
+    path('api/account', include('account.urls')),
+    path('api/job', include('job.urls')),
 
 ]
