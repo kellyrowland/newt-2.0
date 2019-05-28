@@ -4,6 +4,8 @@ from django.urls import reverse
 import json
 from newt.tests import MyTestClient, newt_base_url, login
 from authnz import urls
+import logging
+logger = logging.getLogger("newt." + __name__)
 
 class StoreTests(TestCase):
     fixtures = ["test_fixture.json"]
@@ -51,7 +53,8 @@ class StoreTests(TestCase):
         
         # Tests insertion (store_insert)
         payload = {"data": {"foo":"bar"}}
-        r = self.client.post(reverse('newt-store-name',kwargs={'store_name': store_id}), {"foo":"bar"})
+        r = self.client.post(reverse('newt-store-name',
+            args=(store_id,)), data=payload)
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         obj_id = json_response['output']
@@ -60,6 +63,7 @@ class StoreTests(TestCase):
         r = self.client.get(reverse('newt-store-name',args=(store_id,)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
+        logger.debug(json_response)
         self.assertEqual(json_response['output'][0]['data'], payload['data'])
         self.assertEqual(json_response['output'][0]['oid'], obj_id)
 
