@@ -38,13 +38,14 @@ class CommandTests(TestCase):
     @skipIf(machine != "localhost", "Can't run ls on remote machine")
     def test_command_with_args(self):
         # Run ls in / 
-        r = self.client.post(reverse('newt-command-machine',kwargs={'machine_name': machine}), {'command': '/bin/ls -a /'})
+        r = self.client.post(reverse('newt-command-machine',
+            args=(machine,)), {'command': '/bin/ls -a /'})
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['status'], "OK")
         # os.listdir() leaves off . and .. so add them in
         files = ['.', '..'] + os.listdir('/')
         files.sort()
-        newtfiles = json_response['output']['output'].strip().split('\n')
+        newtfiles = json_response['output']['output'].split()
         newtfiles.sort()
         self.assertEqual(files, newtfiles)

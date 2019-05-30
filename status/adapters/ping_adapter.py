@@ -1,6 +1,8 @@
 # Ping Status Adapter
+import shlex
+from subprocess import run
 from django.conf import settings
-from common.shell import run_command
+from django.utils.encoding import smart_str
 from common.response import json_response
 import logging
 logger = logging.getLogger("newt." + __name__)
@@ -8,7 +10,10 @@ logger = logging.getLogger("newt." + __name__)
 
 def ping(machine_name, hostname):
     # Do a single ping with timeout 2 seconds
-    (output, err, retcode) = run_command('ping -c1 -t2 %s' % hostname)
+    # (output, err, retcode) = run_command('ping -c1 -t2 %s' % hostname)
+    args = shlex.split(smart_str('ping -c1 -t2 %s' % hostname))
+    p = run(args)
+    retcode = p.returncode 
     if retcode == 0:
         return {'system': machine_name, 'status': 'up'}
     else:
