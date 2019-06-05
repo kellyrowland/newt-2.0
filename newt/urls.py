@@ -16,12 +16,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     path('api', RootView.as_view()),
-    path('api/status', include('status.urls')),
-    path('api/file', include('file.urls')),
-    path('api/auth', include('authnz.urls')),
-    path('api/command', include('command.urls')),
-    path('api/store', include('store.urls')),
-    path('api/account', include('account.urls')),
-    path('api/job', include('job.urls')),
+    path('api/status/', include('status.urls')),
+    path('api/file/', include('file.urls')),
+    path('api/auth/', include('authnz.urls')),
+    path('api/command/', include('command.urls')),
+    path('api/store/', include('store.urls')),
+    path('api/account/', include('account.urls')),
+    path('api/job/', include('job.urls')),
 
 ]

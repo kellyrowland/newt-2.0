@@ -11,7 +11,7 @@ class AcctTests(TestCase):
         self.client = MyTestClient()
 
     def test_info_ret(self):
-        self.client.post(newt_base_url + "/auth", data=login)
+        self.client.post(newt_base_url + "/auth/", data=login)
 
         r = self.client.get(reverse('newt-account-user-name', args=(login['username'],)))
         self.assertEqual(r.status_code, 200)
