@@ -24,10 +24,6 @@ DATABASES = {
     }
 }
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['localhost', '127.0.0.1']
-
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -89,6 +85,22 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 't#xa0x&s*^0892&nmspv+sdrf9)rj@$w$n(2vf!n#dorv@oupy'
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+            ],
+        },
+    },
+]
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -96,12 +108,8 @@ TEMPLATE_LOADERS = (
     #     'django.template.loaders.eggs.Loader',
 )
 
-TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.contrib.auth.context_processors.auth',
-    'django.contrib.messages.context_processors.messages',
-)
-
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
+	'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -109,19 +117,23 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'newt.crossdomain.CORSMiddleware',
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ALLOW_METHODS = ( 'POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'HEAD', )
+CORS_ORIGIN_WHITELIST = (
+	'http://128.3.0.0/16',
+	'http://131.243.0.0/16',
+	'http://128.55.0.0/16',
+	'http://198.128.0.0/14',
+	'http://localhost',
+	'http://127.0.0.1',
 )
 
 ROOT_URLCONF = 'newt.urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'newt.wsgi.application'
-
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -137,6 +149,7 @@ INSTALLED_APPS = (
     'store',
     'account',
     'job',
+    'corsheaders',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -203,8 +216,8 @@ LOGGING = {
             'propagate': True,
         },
         'newt': {
-            'handlers': ['console'],
-            'level': 'INFO',
+            'handlers': ['console', 'logfile'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     }
@@ -216,23 +229,16 @@ NEWT_HOST = 'localhost'
 NEWT_DOMAIN = 'nersc.gov'
 NEWT_COOKIE_LIFETIME = 43200
 MYPROXY_SERVER = 'nerscca2.nersc.gov'
-
+SSHPROXY_SERVER = 'https://sshproxy.nersc.gov/create_pair/default/'
 
 # SESSION_COOKIE_DOMAIN = NEWT_HOST
 # SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_NAME = 'newt_sessionid'
 
-# CORS stuff
-# Allow cross site access to newt apps
-XS_SHARING_ALLOWED_ORIGINS = '*'
-XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'HEAD']
-# ALLOWED Networks for cross domain stuff
-ALLOWED_CIDRS = ['128.3.0.0/16', '131.243.0.0/16', '128.55.0.0/16', '198.128.0.0/14']
-# Use ALLOWED_HOSTS (above) to allow specific hostnames not included in ALLOWED_CIDRS
-
 NEWT_CONFIG = {
     'SYSTEMS': [
         {'NAME': 'localhost', 'HOSTNAME': 'localhost'},
+        {'NAME': 'cori', 'HOSTNAME': 'cori.nersc.gov'},
     ],
     'ADAPTERS': {
         'STATUS': {

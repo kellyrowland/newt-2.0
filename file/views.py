@@ -20,11 +20,17 @@ class FileRootView(JSONRestView):
         logger.debug("Entering %s:%s" % (self.__class__.__name__, __name__))
         return file_adapter.get_systems(request)
 
-# /api/file/<machine_name>/<path>/
+# /api/file/<machine_name>/
 class FileView(JSONRestView):
-    def get(self, request, machine_name, path):
+    def get(self, request, machine_name, path='/'):
         logger.debug("Entering %s:%s" % (self.__class__.__name__, __name__))
-        if request.GET.get("download", False):
+        return file_adapter.get_dir(request, machine_name, path)
+
+# /api/file/<machine_name>/<path>/
+class FilePathView(JSONRestView):
+    def get(self, request, machine_name, path='/'):
+        logger.debug("Entering %s:%s" % (self.__class__.__name__, __name__))
+        if request.GET.get("download", True):
             return file_adapter.download_path(request, machine_name, path)
         else:
             return file_adapter.get_dir(request, machine_name, path)

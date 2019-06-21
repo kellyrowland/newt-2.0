@@ -15,7 +15,7 @@ class MyTestClient(Client):
         def get_headers(response):
             headers = {}
             temp = response.serialize_headers().splitlines()
-            for key, val in [line.split(": ") for line in temp]:
+            for key, val in [line.decode('utf-8').split(": ")for line in temp]:
                 headers[key.lower()] = val
             return headers
         response.headers = get_headers(response)

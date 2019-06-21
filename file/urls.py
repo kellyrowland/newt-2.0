@@ -1,11 +1,10 @@
-from django.conf.urls import patterns
+from django.urls import path
+from file.views import FileView, FileRootView, FilePathView, ExtraFileView
 
-from file.views import FileView, FileRootView, ExtraFileView
-
-
-urlpatterns = patterns('file.views',
-    (r'^/?$', FileRootView.as_view()),
-    (r'^/(?P<machine_name>[^/]+)(?P<path>/.*)$', FileView.as_view()),
-    (r'^(?P<query>.+)/$', ExtraFileView.as_view()),
-)
+urlpatterns = [
+    path('', FileRootView.as_view(), name='newt-file'),
+    path('<slug:machine_name>/', FileView.as_view(), name='newt-file-machine'),
+    path('<slug:machine_name>/<path:path>/', FilePathView.as_view(), name='newt-file-machine-path'),
+    path('<str:query>/', ExtraFileView.as_view()),
+]
     

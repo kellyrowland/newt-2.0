@@ -1,9 +1,11 @@
 from django.test import TestCase
 from django.conf import settings
+from django.urls import reverse
 import json
 import os
 import random
-from newt.tests import MyTestClient, newt_base_url, login
+from newt.tests import MyTestClient, login
+from authnz import urls
 try:
     from newt.local_settings import test_machine as machine
 except ImportError:
@@ -13,17 +15,17 @@ except ImportError:
 class FileTests(TestCase):
     def setUp(self):
         self.client = MyTestClient()
-        self.client.post(newt_base_url + "/auth", data=login)
+        self.client.post(reverse('newt-auth'), data=login)
 
     def test_root(self):
-        r = self.client.get(newt_base_url+'/file')
+        r = self.client.get(reverse('newt-file'))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['status'], "OK")
         self.assertIn(machine, json_response['output'])
         
-    def test_getdir(self):        
-        r = self.client.get(newt_base_url+'/file/'+machine+"/")
+    def test_getdir(self):
+        r = self.client.get(reverse('newt-file-machine', args=(machine,)))
         self.assertEqual(r.status_code, 200)
 
         json_response = r.json()
@@ -35,13 +37,15 @@ class FileTests(TestCase):
         
     def test_uploadfile(self):
         rand_string = '%010x' % random.randrange(16**10)
-        r = self.client.put(newt_base_url + "/file/"+machine+"/tmp/tmp_newt_2.txt", data=rand_string)
+        r = self.client.put(reverse('newt-file-machine-path',
+            args=(machine,"/tmp/tmp_newt_2.txt",)), rand_string)
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['location'], "/tmp/tmp_newt_2.txt")
-        r = self.client.get(newt_base_url+'/file/'+machine+'/tmp/tmp_newt_2.txt?download=true')
+        r = self.client.get(reverse('newt-file-machine-path',
+            args=(machine,"/tmp/tmp_newt_2.txt",)), download=True)
         self.assertEqual(r.status_code, 200)
-        self.assertEqual(next(r.streaming_content), rand_string)
+        self.assertEqual(next(r.streaming_content).decode("utf-8"), rand_string)
         try:
             os.remove("/tmp/tmp_newt_2.txt")
         except Exception:

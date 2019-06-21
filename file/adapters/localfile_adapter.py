@@ -53,7 +53,7 @@ def put_file(request, machine, path):
     src = tmp_file.name
     dest = path
 
-    (output, error, retcode) = run_command("cp %s %s" % (src, dest))
+    (output, error, retcode) = run_command("cp %s %s" % (src, dest), machine)
     if retcode != 0:
         return json_response(content=output, status="ERROR", status_code=500, error=error)
     tmp_file.close()
@@ -63,7 +63,7 @@ def put_file(request, machine, path):
 def get_dir(request, machine_name, path):
     try:
         command = 'ls -la %s' % path
-        (output, error, retcode) = run_command(command)
+        (output, error, retcode) = run_command(command, machine_name)
 
         if retcode != 0:
             return json_response(content=output, status="ERROR", status_code=500, error=error)

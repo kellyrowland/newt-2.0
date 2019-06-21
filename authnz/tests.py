@@ -12,20 +12,20 @@ class AuthTests(TestCase):
 
     def test_login(self):
         # Should not be logged in
-        r = self.client.get(newt_base_url + "/auth")
+        r = self.client.get(newt_base_url + "/auth/")
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['auth'], False)
         
         # Should be logged in
-        r = self.client.post(newt_base_url + "/auth", data=login)
+        r = self.client.post(newt_base_url + "/auth/", data=login)
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['auth'], True)
         self.assertEqual(json_response['output']['username'], login['username'])
 
         # Loggen in self.client should return user info
-        r = self.client.get(newt_base_url + "/auth")
+        r = self.client.get(newt_base_url + "/auth/")
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['auth'], True)
@@ -34,18 +34,18 @@ class AuthTests(TestCase):
 
     def test_logout(self):
         # Should be logged in
-        r = self.client.post(newt_base_url + "/auth", data=login)
+        r = self.client.post(newt_base_url + "/auth/", data=login)
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['auth'], True)
         self.assertEqual(json_response['output']['username'], login['username'])
 
-        r = self.client.delete(newt_base_url + "/auth")
+        r = self.client.delete(newt_base_url + "/auth/")
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['auth'], False)
 
-        r = self.client.get(newt_base_url + "/auth")
+        r = self.client.get(newt_base_url + "/auth/")
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['auth'], False)

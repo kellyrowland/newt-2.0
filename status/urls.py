@@ -1,11 +1,9 @@
-from django.conf.urls import patterns
-
+from django.urls import path
 from status.views import StatusView, ExtraStatusView
 
-
-urlpatterns = patterns('status.views',
-    (r'^/?$', StatusView.as_view()),
-    (r'^/(?P<machine_name>[^/]+)$', StatusView.as_view()),
-    (r'^(?P<query>.+)/$', ExtraStatusView.as_view()),
-)
+urlpatterns = [
+    path(r'', StatusView.as_view(), name='newt-status'),
+    path(r'<slug:machine_name>/', StatusView.as_view(), name='newt-status-machine'),
+    path(r'<str:query>/', ExtraStatusView.as_view()),
+]
     

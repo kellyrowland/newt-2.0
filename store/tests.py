@@ -1,8 +1,11 @@
 from django.test import TestCase
 from django.conf import settings
+from django.urls import reverse
 import json
 from newt.tests import MyTestClient, newt_base_url, login
-
+from authnz import urls
+import logging
+logger = logging.getLogger("newt." + __name__)
 
 class StoreTests(TestCase):
     fixtures = ["test_fixture.json"]
@@ -25,16 +28,16 @@ class StoreTests(TestCase):
             pass
 
     def test_store_basic(self):
-        self.client.post(newt_base_url + "/auth", data=login)
+        self.client.post(reverse('newt-auth'), data=login)
 
-        r = self.client.get(newt_base_url + "/store")
+        r = self.client.post(reverse('newt-store'))
         self.assertEqual(r.status_code, 200)
 
     def test_store_manipulation(self):
-        self.client.post(newt_base_url + "/auth", data=login)
+        self.client.post(reverse('newt-auth'), data=login)
 
         # Creates a new store (create_store)
-        r = self.client.post(newt_base_url + "/store")
+        r = self.client.post(reverse('newt-store'))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
 
@@ -43,63 +46,64 @@ class StoreTests(TestCase):
         store_id = json_response['output']['id']
         
         # Ensures that new store is empty (get_store_contents)
-        r = self.client.get(newt_base_url + "/store/" + store_id + "/")
+        r = self.client.get(reverse('newt-store-name',args=(store_id,)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], [])
         
         # Tests insertion (store_insert)
-        payload = {"data": json.dumps({"foo":"bar"})}
-        r = self.client.post(newt_base_url + "/store/" + store_id + "/",
-                          data=payload)
+        payload = {"data": {"foo":"bar"}}
+        r = self.client.post(reverse('newt-store-name',
+            args=(store_id,)), data=payload)
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         obj_id = json_response['output']
 
         # Checks insertion by checking all of the store's objects (get_store_contents)
-        r = self.client.get(newt_base_url + "/store/" + store_id + "/")
+        r = self.client.get(reverse('newt-store-name',args=(store_id,)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
+        logger.debug(json_response)
         self.assertEqual(json_response['output'][0]['data'], payload['data'])
         self.assertEqual(json_response['output'][0]['oid'], obj_id)
 
         # Checks insertion by checking the individual object (store_get_obj)
-        r = self.client.get(newt_base_url + "/store/" + store_id + "/" + obj_id + "/")
+        r = self.client.get(reverse('newt-store-name-id',args=(store_id,obj_id,)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], payload['data'])
         
         # Tests update (store_update)
-        updated_payload = {"data": json.dumps({"foo": "baz"})}
-        r = self.client.put(newt_base_url + "/store/" + store_id + "/" + obj_id + "/",
-                         data=json.dumps(updated_payload), content_type="application/json")
+        updated_payload = {"data": {"foo": "baz"}}
+        r = self.client.put(reverse('newt-store-name-id',
+            kwargs={'store_name':store_id,'obj_id':obj_id}), {"foo": "baz"})
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], obj_id)
 
         # Checks updated data
-        r = self.client.get(newt_base_url + "/store/" + store_id + "/" + obj_id + "/")
+        r = self.client.get(reverse('newt-store-name-id',args=(store_id,obj_id,)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], updated_payload['data'])
 
         # Tests delete
-        r = self.client.delete(newt_base_url + "/store/" + store_id + "/")
+        r = self.client.delete(reverse('newt-store-name',args=(store_id,)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], store_id)
 
         # Ensures that getting the deleted store will error
-        r = self.client.get(newt_base_url + "/store/" + store_id + "/")
+        r = self.client.get(reverse('newt-store-name',args=(store_id,)))
         self.assertEqual(r.status_code, 404)        
 
     def test_store_creation_with_initial(self):
-        self.client.post(newt_base_url + "/auth", data=login)
+        self.client.post(reverse('newt-auth'), data=login)
 
-        payload = {"data": json.dumps({"x":5})}
+        payload = {"data": {"x":5}}
 
         # Without an initial name
-        r = self.client.post(newt_base_url + "/store/", data=payload)
+        r = self.client.post(reverse('newt-store'), {"x":5})
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         store_id = json_response['output']['id']
@@ -107,14 +111,13 @@ class StoreTests(TestCase):
         obj_id = json_response['output']['oid'][0]
 
         # Checks the data
-        r = self.client.get(newt_base_url + "/store/" + store_id + "/" + obj_id + "/")
+        r = self.client.get(reverse('newt-store-name-id'))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], payload['data'])
 
-
         # With an initial name
-        r = self.client.post(newt_base_url + "/store/teststore1/", data=payload)
+        r = self.client.post(reverse('newt-store-name',kwargs={'store_name': "teststore1"}), {"x":5})
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['id'], "teststore1")
@@ -122,28 +125,28 @@ class StoreTests(TestCase):
         obj_id = json_response['output']['oid'][0]
 
         # Checks the data
-        r = self.client.get(newt_base_url + "/store/teststore1/" + obj_id + "/")
+        r = self.client.get(reverse('newt-store-name-id'))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], payload['data'])
 
         # Deletes the store
-        r = self.client.delete(newt_base_url + "/store/teststore1/")
+        r = self.client.delete(reverse('newt-store-name'))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], "teststore1")
-        r = self.client.delete(newt_base_url + "/store/" + store_id + "/")
+        r = self.client.delete(reverse('newt-store-name-id'))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output'], store_id)
 
     def test_store_perms(self):
-        self.client.post(newt_base_url + "/auth", data=login)
+        self.client.post(reverse('newt-auth'), data=login)
 
         # Create a store
-        r = self.client.post(newt_base_url + "/store/test_store_1/")
+        r = self.client.post(reverse('newt-store-name',args=("test_store_1",)))
         self.assertEqual(r.status_code, 200)
-        r = self.client.get(newt_base_url + "/store/test_store_1/perms/")
+        r = self.client.get(reverse('newt-store-perms',args=("test_store_1",)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         # Checks that the creator has appropriate permissions
@@ -153,10 +156,10 @@ class StoreTests(TestCase):
         self.assertIn("w", json_response['output']['perms'][0]['perms'])
 
         payload = {"data": json.dumps([{"name": login['username'], "perms": ["r", "w", "x"]}])}
-        r = self.client.post(newt_base_url + "/store/test_store_1/perms/", data=payload)
+        r = self.client.post(reverse("newt-store-perms", kwargs={"store_name":"test_store_1"}), payload)
         self.assertEqual(r.status_code, 200)
 
-        r = self.client.get(newt_base_url + "/store/test_store_1/perms/")
+        r = self.client.get(reverse('newt-store-perms',args=("test_store_1",)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['name'], "test_store_1")
@@ -166,7 +169,7 @@ class StoreTests(TestCase):
         self.assertIn("x", json_response['output']['perms'][0]['perms'])
 
         # Deletes the store
-        r = self.client.delete(newt_base_url + "/store/test_store_1/")
+        r = self.client.delete(reverse('newt-store-name',args=("test_store_1",)))
         self.assertEqual(r.status_code, 200)
-        r = self.client.get(newt_base_url + "/store/test_store_1/perms/")
+        r = self.client.get(reverse('newt-store-perms',args=("test_store_1",)))
         self.assertEqual(r.status_code, 404)

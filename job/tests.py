@@ -1,9 +1,11 @@
 from django.test import TestCase
 from django.conf import settings
+from django.urls import reverse
 import json
 import time
 import os
-from newt.tests import MyTestClient, newt_base_url, login
+from newt.tests import MyTestClient, login
+from authnz import urls
 
 try:
     from newt.local_settings import test_machine as machine
@@ -16,11 +18,11 @@ class JobTests(TestCase):
 
     def setUp(self):
         self.client = MyTestClient()
-        self.client.post(newt_base_url + "/auth", data=login)
+        self.client.post(reverse('newt-auth'), data=login)
 
     def test_get_queues(self):
         # Tests getting queues
-        r = self.client.get(newt_base_url + "/job/")
+        r = self.client.get(reverse('newt-job'))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertTrue(len(json_response['output']) > 0)
@@ -32,7 +34,8 @@ class JobTests(TestCase):
         payload = {
             "jobscript": "/bin/hostname\nsleep 10"
         }
-        r = self.client.post(newt_base_url + "/job/"+machine+"/", data=payload)
+        r = self.client.post(reverse('newt-job-machine',
+            args=(machine,)), data=payload)
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertIsNot(json_response['output']['jobid'], None)
@@ -44,12 +47,12 @@ class JobTests(TestCase):
         time.sleep(1)  
 
         # Tests getting job info
-        r = self.client.get(newt_base_url + "/job/"+machine+"/%s/" % job_id)
+        r = self.client.get(reverse('newt-job-machine-jobid',args=(machine,job_id,)))
         self.assertEqual(r.status_code, 200)
         json_response = r.json()
         self.assertEqual(json_response['output']['jobid'], job_id)
         self.assertEqual(json_response['output']['user'], login['username'])
         
         # Delete job from queue
-        r = self.client.delete(newt_base_url + "/job/"+machine+"/%s/" % job_id)
+        r = self.client.get(reverse('newt-job-machine-jobid',args=(machine,job_id,)))
         self.assertEqual(r.status_code, 200)

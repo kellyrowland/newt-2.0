@@ -1,11 +1,9 @@
-from django.conf.urls import patterns
-
+from django.urls import path
 from command.views import CommandView, CommandRootView, ExtraCommandView
 
-
-urlpatterns = patterns('command.views',
-    (r'^/?$', CommandRootView.as_view()),
-    (r'^/(?P<machine_name>[^/]+)$', CommandView.as_view()),
-    (r'^(?P<query>.+)/$', ExtraCommandView.as_view()),
-)
+urlpatterns = [
+    path('', CommandRootView.as_view(), name='newt-command'),
+    path('<slug:machine_name>/', CommandView.as_view(), name='newt-command-machine'),
+    path('<str:query>/', ExtraCommandView.as_view()),
+]
     

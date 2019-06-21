@@ -1,13 +1,10 @@
-from django.conf.urls import patterns
-
+from django.urls import path
 from store.views import *
 
-
-urlpatterns = patterns('command.views',
-    (r'^/?$', StoreRootView.as_view()),
-    (r'^/(?P<store_name>[^/]+)/$', StoreView.as_view()),
-    (r'^/(?P<store_name>[^/]+)/perms/$', StorePermView.as_view()),
-    (r'^/(?P<store_name>[^/]+)/(?P<obj_id>\d+)/$', StoreObjView.as_view()),
-    (r'^(?P<query>.+)/$', ExtraStoreView.as_view()),
-)
-    
+urlpatterns = [
+    path(r'', StoreRootView.as_view(),name='newt-store'),
+    path(r'<slug:store_name>/', StoreView.as_view(), name='newt-store-name'),
+    path(r'<slug:store_name>/perms/', StorePermView.as_view(), name='newt-store-perms'),
+    path(r'<slug:store_name>/<int:obj_id>/', StoreObjView.as_view(), name='newt-store-name-id'),
+    path(r'<str:query>/', ExtraStoreView.as_view()),
+]
