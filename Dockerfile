@@ -12,15 +12,19 @@ RUN git clone -b docker https://github.com/kellyrowland/newt-2.0.git
 
 WORKDIR /newt-2.0/
 
-RUN pip install -r requirements.txt && \
-    pip install django-404-middleware
+RUN pip install -r requirements.txt
 
 RUN python manage.py migrate
+
+WORKDIR /srv/
 
 EXPOSE 8000
 
 ADD docker-entrypoint.sh /srv/
 RUN chmod +x docker-entrypoint.sh
 ENTRYPOINT ["./docker-entrypoint.sh"]
+
+WORKDIR /newt-2.0/
+
 #CMD ["python", "/srv/newt-2.0/manage.py", "runserver", "0.0.0.0:8000"]
 CMD ["/bin/bash"]
