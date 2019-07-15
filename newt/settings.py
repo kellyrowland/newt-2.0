@@ -123,20 +123,8 @@ MIDDLEWARE = (
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_METHODS = ( 'POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'HEAD', )
-CORS_ORIGIN_WHITELIST = (
-	'http://128.3.0.0/16',
-	'http://131.243.0.0/16',
-	'http://128.55.0.0/16',
-	'http://198.128.0.0/14',
-	'http://localhost',
-	'http://127.0.0.1',
-    'http://0.0.0.0'
-)
 
-ALLOWED_HOSTS = [
-    '0.0.0.0', '127.0.0.1',
-    'newt-2.newt-2.dev-cattle.stable.spin.nersc.org'
-    ]
+ALLOWED_HOSTS = ['0.0.0.0', 'newt-2.newt-2.dev-cattle.stable.spin.nersc.org']
 
 ROOT_URLCONF = 'newt.urls'
 
