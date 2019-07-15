@@ -16,15 +16,7 @@ RUN pip install -r requirements.txt
 
 RUN python manage.py migrate
 
-WORKDIR /srv/
+EXPOSE 8080
 
-EXPOSE 8000
-
-ADD docker-entrypoint.sh /srv/
-RUN chmod +x docker-entrypoint.sh
-ENTRYPOINT ["./docker-entrypoint.sh"]
-
-WORKDIR /newt-2.0/
-
-#CMD ["python", "/srv/newt-2.0/manage.py", "runserver", "0.0.0.0:8000"]
-CMD ["/bin/bash"]
+ENTRYPOINT ["python", "manage.py"]
+CMD ["runserver", "0.0.0.0:8080"]

@@ -109,7 +109,7 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE = (
-	'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -133,7 +133,10 @@ CORS_ORIGIN_WHITELIST = (
     'http://0.0.0.0'
 )
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = [
+    '0.0.0.0', '127.0.0.1',
+    'newt-2.newt-2.dev-cattle.stable.spin.nersc.org'
+    ]
 
 ROOT_URLCONF = 'newt.urls'
 
