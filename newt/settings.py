@@ -29,7 +29,7 @@ DATABASES = {
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'America/Los_Angeles'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -109,26 +109,22 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE = (
-	'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django_json_404_middleware.JSON404Middleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_METHODS = ( 'POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'HEAD', )
-CORS_ORIGIN_WHITELIST = (
-	'http://128.3.0.0/16',
-	'http://131.243.0.0/16',
-	'http://128.55.0.0/16',
-	'http://198.128.0.0/14',
-	'http://localhost',
-	'http://127.0.0.1',
-)
+
+ALLOWED_HOSTS = ['0.0.0.0', 'newt-2.newt-2.dev-cattle.stable.spin.nersc.org', '127.0.0.1']
 
 ROOT_URLCONF = 'newt.urls'
 
@@ -157,7 +153,8 @@ INSTALLED_APPS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
+    #'django.contrib.auth.backends.ModelBackend',
+    'authnz.adapters.sshapi_backend.SSHAPIBackend',
 )
 
 
@@ -234,6 +231,8 @@ SSHPROXY_SERVER = 'https://sshproxy.nersc.gov/create_pair/default/'
 # SESSION_COOKIE_DOMAIN = NEWT_HOST
 # SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_NAME = 'newt_sessionid'
+CSRF_COOKIE_DOMAIN = NEWT_HOST
+CSRF_COOKIE_NAME = 'newt_sessionid'
 
 NEWT_CONFIG = {
     'SYSTEMS': [
@@ -250,7 +249,8 @@ NEWT_CONFIG = {
             'models': "",
         },
         'AUTH': {
-            'adapter': 'authnz.adapters.dbauth_adapter',
+            # 'adapter': 'authnz.adapters.dbauth_adapter',
+            'adapter': 'authnz.adapters.sshapi_adapter',
             'models': '',
         },
         'COMMAND': {
