@@ -4,7 +4,7 @@ import re
 logger = logging.getLogger("newt." + __name__)
 
 def is_logged_in(request):
-    if (request.user is not None) and (request.user.is_authenticated()):
+    if (request.user is not None) and (request.user.is_authenticated):
         output=dict(auth=True,
                     username=request.user.username,
                     session_lifetime=request.session.get_expiry_age(),
@@ -24,6 +24,7 @@ def get_status(request):
 def login(request):
     username = request.POST['username']
     password = request.POST['password']
+    # user = auth.authenticate(username=username, password=password)
     user = auth.authenticate(username=username, password=password)
 
     logger.debug("Attemping to log in user: %s" % username)
