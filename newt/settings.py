@@ -112,7 +112,7 @@ MIDDLEWARE = (
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django_json_404_middleware.JSON404Middleware',
@@ -124,7 +124,7 @@ MIDDLEWARE = (
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_METHODS = ( 'POST', 'GET', 'OPTIONS', 'PUT', 'DELETE', 'HEAD', )
 
-ALLOWED_HOSTS = ['0.0.0.0', 'newt-2.newt-2.dev-cattle.stable.spin.nersc.org']
+ALLOWED_HOSTS = ['0.0.0.0', 'newt-2.newt-2.dev-cattle.stable.spin.nersc.org', '127.0.0.1']
 
 ROOT_URLCONF = 'newt.urls'
 
@@ -153,8 +153,8 @@ INSTALLED_APPS = (
 )
 
 AUTHENTICATION_BACKENDS = (
-    'django.contrib.auth.backends.ModelBackend',
-    #'authnz.adapters.sshapi_backend.SSHAPIBackend',
+    # 'django.contrib.auth.backends.ModelBackend',
+    'authnz.adapters.sshapi_backend.SSHAPIBackend',
 )
 
 
