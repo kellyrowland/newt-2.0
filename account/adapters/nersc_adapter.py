@@ -5,6 +5,16 @@ from common.response import json_response
 
 nim_base_url = 'http://nimprod.nersc.gov:8004'
 
+def get_host_info(host_name=None, hid=None):
+    if hid:
+        return get_resource("host/id/%d/" % hid)
+    elif host_name:
+        return get_resource("host/%s/" % host_name)
+    else:
+        return json_response(status=ERROR, 
+                             status_code=400, 
+                             error="No data received.")
+
 def get_user_info(user_name=None, uid=None):
     if uid:
         return get_resource("user/id/%d/" % uid)
@@ -19,11 +29,31 @@ def get_group_info(group_name=None, gid=None):
     if gid:
         return get_resource("group/id/%d/" % uid)
     elif group_name:
-        return get_resource("user/%s/" % user_name)
+        return get_resource("group/%s/" % group_name)
     else:
         return json_response(status=ERROR, 
                              status_code=400, 
                              error="No data received.")
+
+def get_repo_info(repo_name=None, rid=None):
+    if rid:
+        return get_resource("repo/id/%d/" % rid)
+    elif repo_name:
+        return get_resource("repo/%s/" % repo_name)
+    else:
+        return json_response(status=ERROR, 
+                             status_code=400, 
+                             error="No data received.")
+
+def get_usage_repo_info(repo_name=None):
+    return get_usage("repo/%s/" % repo_name)
+
+def get_usage_repo_users_info(repo_name=None):
+    return get_usage("repo/%s/users/" % repo_name)
+
+def get_usage_user_info(user_name=None):
+    return get_usage("user/%s/" % user_name)
+
 def get_resource(path):
     r = requests.get(nim_base_url + "/info/json/" + path)
     if r.status_code == 200:

@@ -261,7 +261,7 @@ NEWT_CONFIG = {
             'models': 'store.adapters.dbstore_models',
         },
         'ACCOUNT': {
-            'adapter': 'account.adapters.django_adapter',
+            'adapter': 'account.adapters.nersc_adapter',
             'models': '',
         },
         'JOB': {
