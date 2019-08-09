@@ -227,7 +227,7 @@ NEWT_DOMAIN = 'nersc.gov'
 NEWT_COOKIE_LIFETIME = 43200
 MYPROXY_SERVER = 'nerscca2.nersc.gov'
 SSHPROXY_SERVER = 'https://sshproxy.nersc.gov/create_pair/default/'
-
+SSH_CMD = 'ssh'
 # SESSION_COOKIE_DOMAIN = NEWT_HOST
 # SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_NAME = 'newt_sessionid'

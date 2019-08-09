@@ -1,6 +1,6 @@
 from subprocess import PIPE, run
 import shlex
-
+from django.conf import settings
 import logging
 import signal
 from django.utils.encoding import smart_str
@@ -38,10 +38,12 @@ def run_command(command, env=None, timeout=600):
 
     return (output, error, retcode)
 
-def run_ssh_command(command, machine_name, env=None, timeout=600):
-    flags = " -q -o StrictHostKeyChecking=no -i %s -l %s" % (self.credfilename,
-                                                             self.user.username)
-    command = '%s %s %s %s' % (_settings.SSH_CMD, flags, machine_name, command)
+def run_ssh_command(request, command, machine_name, env=None, timeout=600):
+    cert_path = '/tmp'
+    cert = '%s/%s.key' % (cert_path, request.user.username)
+    flags = " -q -o StrictHostKeyChecking=no -i %s -l %s" % (cert_path,
+                                                             request.user.username)
+    command = '%s %s %s %s' % (settings.SSH_CMD, flags, machine_name, command)
     (output, error, retcode) = run_command(command)
 
     return (output, error, retcode)
