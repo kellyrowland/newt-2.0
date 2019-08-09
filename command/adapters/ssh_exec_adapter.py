@@ -1,15 +1,20 @@
 from django.conf import settings
-from common.shell import run_command
+from common.shell import run_ssh_command
 from common.response import json_response
 import logging
 logger = logging.getLogger("newt." + __name__)
 
 def execute(request, machine_name, command):
+    conf = settings.NEWT_CONFIG
+    for s in conf['SYSTEMS']:
+        if machine_name == s['NAME']:
+            hostname = s['HOSTNAME']
+            break
     try:
-        (output, error, retcode) = run_command(command)
+        (output, error, retcode) = run_ssh_command(request,command,hostname)
         response = {
-            'output': output,
-            'error': error,
+            'output': output.decode("utf-8"),
+            'error': error.decode("utf-8"),
             'retcode': retcode
         }
         return response
