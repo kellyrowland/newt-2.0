@@ -5,8 +5,13 @@ import logging
 logger = logging.getLogger("newt." + __name__)
 
 def execute(request, machine_name, command):
+    conf = settings.NEWT_CONFIG
+    for s in conf['SYSTEMS']:
+        if machine_name == s['NAME']:
+            hostname = s['HOSTNAME']
+            break
     try:
-        (output, error, retcode) = run_command(command)
+        (output, error, retcode) = run_command(command,hostname)
         response = {
             'output': output,
             'error': error,
