@@ -236,7 +236,6 @@ CSRF_COOKIE_NAME = 'newt_sessionid'
 
 NEWT_CONFIG = {
     'SYSTEMS': [
-        {'NAME': 'localhost', 'HOSTNAME': 'localhost'},
         {'NAME': 'cori', 'HOSTNAME': 'cori.nersc.gov'},
     ],
     'ADAPTERS': {
@@ -254,7 +253,7 @@ NEWT_CONFIG = {
             'models': '',
         },
         'COMMAND': {
-            'adapter': 'command.adapters.exec_adapter',
+            'adapter': 'command.adapters.ssh_exec_adapter',
             'models': '',
         },
         'STORES': {

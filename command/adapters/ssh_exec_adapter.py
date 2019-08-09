@@ -11,10 +11,10 @@ def execute(request, machine_name, command):
             hostname = s['HOSTNAME']
             break
     try:
-        (output, error, retcode) = run_command(command,hostname)
+        (output, error, retcode) = run_ssh_command(command,hostname)
         response = {
-            'output': output,
-            'error': error,
+            'output': output.decode("utf-8"),
+            'error': error.decode("utf-8"),
             'retcode': retcode
         }
         return response
