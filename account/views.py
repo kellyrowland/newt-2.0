@@ -50,6 +50,30 @@ class UsageUserInfoView(AuthJSONRestView):
     def get(self, request, user_name=None):
         return acct_adapter.get_usage_user_info(user_name=user_name)
 
+# /api/account/class/<class_name>/
+# /api/account/class/id/<cid>/
+class ClassInfoView(AuthJSONRestView):
+    def get(self, request, class_name=None, cid=None):
+        return acct_adapter.get_class_info(class_name=class_name, cid=cid)
+
+# /api/account/office/<office_name>/
+# /api/account/office/id/<oid>/
+class OfficeInfoView(AuthJSONRestView):
+    def get(self, request, office_name=None, oid=None):
+        return acct_adapter.get_office_info(office_name=office_name, oid=oid)
+
+# /api/account/organization/<org_name>/
+# /api/account/organization/id/<oid>/
+class OrgInfoView(AuthJSONRestView):
+    def get(self, request, org_name=None, oid=None):
+        return acct_adapter.get_org_info(org_name=org_name, oid=oid)
+
+# /api/account/person/<person_name>/
+# /api/account/person/id/<pid>/
+class PersonInfoView(AuthJSONRestView):
+    def get(self, request, person_name=None, pid=None):
+        return acct_adapter.get_person_info(person_name=person_name, pid=pid)
+
 # /api/account/<query>/
 class ExtraAcctView(JSONRestView):
     def get(self, request, query):

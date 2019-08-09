@@ -54,6 +54,46 @@ def get_usage_repo_users_info(repo_name=None):
 def get_usage_user_info(user_name=None):
     return get_usage("user/%s/" % user_name)
 
+def get_class_info(class_name=None, cid=None):
+    if cid:
+        return get_resource("class/id/%d/" % cid)
+    elif class_name:
+        return get_resource("class/%s/" % class_name)
+    else:
+        return json_response(status=ERROR, 
+                             status_code=400, 
+                             error="No data received.")
+
+def get_office_info(office_name=None, oid=None):
+    if oid:
+        return get_resource("office/id/%d/" % oid)
+    elif office_name:
+        return get_resource("office/%s/" % office_name)
+    else:
+        return json_response(status=ERROR, 
+                             status_code=400, 
+                             error="No data received.")
+
+def get_org_info(org_name=None, oid=None):
+    if oid:
+        return get_resource("organization/id/%d/" % oid)
+    elif org_name:
+        return get_resource("organization/%s/" % org_name)
+    else:
+        return json_response(status=ERROR, 
+                             status_code=400, 
+                             error="No data received.")
+
+def get_person_info(person_name=None, pid=None):
+    if pid:
+        return get_resource("person/id/%d/" % pid)
+    elif person_name:
+        return get_resource("person/%s/" % person_name)
+    else:
+        return json_response(status=ERROR, 
+                             status_code=400, 
+                             error="No data received.")
+
 def get_resource(path):
     r = requests.get(nim_base_url + "/info/json/" + path)
     if r.status_code == 200:

@@ -13,5 +13,13 @@ urlpatterns = [
     path('usage/repo/<slug:repo_name>/', UsageRepoInfoView.as_view(), name='newt-account-usage-repo'),
     path('usage/repo/<slug:repo_name>/users/', UsageRepoInfoView.as_view(), name='newt-account-usage-repo-users'),
     path('usage/user/<slug:user_name>/', UsageUserInfoView.as_view(), name='newt-account-usage-user'),
+    path('class/id/<int:cid>/', ClassInfoView.as_view(), name='newt-account-class-id'),
+    path('class/<slug:class_name>/', ClassInfoView.as_view(), name='newt-account-class-name'),
+    path('office/id/<int:oid>/', OfficeInfoView.as_view(), name='newt-account-office-id'),
+    path('office/<slug:office_name>/', OfficeInfoView.as_view(), name='newt-account-office-name'),
+    path('organization/id/<int:oid>/', OrgInfoView.as_view(), name='newt-account-org-id'),
+    path('organization/<slug:org_name>/', OrgInfoView.as_view(), name='newt-account-org-name'),
+    path('person/id/<int:pid>/', PersonInfoView.as_view(), name='newt-account-person-id'),
+    path('person/<str:person_name>/', PersonInfoView.as_view(), name='newt-account-person-name'),
     path('<str:query>/', ExtraAcctView.as_view()),
 ]
