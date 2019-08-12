@@ -21,5 +21,11 @@ urlpatterns = [
     path('organization/<slug:org_name>/', OrgInfoView.as_view(), name='newt-account-org-name'),
     path('person/id/<int:pid>/', PersonInfoView.as_view(), name='newt-account-person-id'),
     path('person/<str:person_name>/', PersonInfoView.as_view(), name='newt-account-person-name'),
-    path('<str:query>/', ExtraAcctView.as_view()),
+    path('program/id/<int:pid>/', ProgramInfoView.as_view(), name='newt-account-program-id'),
+    path('program/<str:program_name>/', ProgramInfoView.as_view(), name='newt-account-program-name'),
+    path('project/id/<int:pid>/', ProjectInfoView.as_view(), name='newt-account-project-id'),
+    path('project/<str:project_name>/', ProjectInfoView.as_view(), name='newt-account-project-name'),
+    path('scicat/id/<int:sid>/', ScicatInfoView.as_view(), name='newt-account-scicat-id'),
+    path('scicat/<str:scicat_name>/', ScicatInfoView.as_view(), name='newt-account-scicat-name'),
+    path('<str:query>/', GeneralAcctView.as_view()),
 ]
