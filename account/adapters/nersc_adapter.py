@@ -25,7 +25,7 @@ def get_usage(path):
 
 def get_image(query):
     import re
-    r = requests.get(nim_base_url + "/info/json/image/" + query)
+    r = requests.get(nim_base_url + "/info/json/" + query)
     if r.status_code == 200:
         if re.search(r'\/photo\/?$', query):
             return HttpResponse(r.content, content_type=r.headers['content-type'])

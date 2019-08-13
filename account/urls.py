@@ -27,5 +27,7 @@ urlpatterns = [
     path('project/<str:project_name>/', ProjectInfoView.as_view(), name='newt-account-project-name'),
     path('scicat/id/<int:sid>/', ScicatInfoView.as_view(), name='newt-account-scicat-id'),
     path('scicat/<str:scicat_name>/', ScicatInfoView.as_view(), name='newt-account-scicat-name'),
+    path('image/id/<int:iid>/photo/', ImageInfoView.as_view(), name='newt-account-image-id'),
+    path('image/<str:simage_name>/photo/', ImageInfoView.as_view(), name='newt-account-image-name'),
     path('<str:query>/', GeneralAcctView.as_view()),
 ]
