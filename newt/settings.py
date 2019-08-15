@@ -268,6 +268,10 @@ NEWT_CONFIG = {
             'adapter': 'job.adapters.unix_adapter',
             'models': '',
         },
+        'SITE': {
+            'adapter': 'site.adapters.site_adapter',
+            'models': '',
+        },
     },
 }
 
