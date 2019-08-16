@@ -8,7 +8,7 @@ RUN apt-get update && \
     ln -s /usr/bin/python3 python && \
     pip3 install --upgrade pip
 
-RUN git clone -b docker https://github.com/kellyrowland/newt-2.0.git
+RUN git clone -b py3 https://github.com/NERSC/newt-2.0.git
 
 WORKDIR /newt-2.0/
 
