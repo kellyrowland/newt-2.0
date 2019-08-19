@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'file',
     'store',
     'account',
+    'website',
     'job',
     'corsheaders',
     # Uncomment the next line to enable the admin:
@@ -269,7 +270,7 @@ NEWT_CONFIG = {
             'models': '',
         },
         'SITE': {
-            'adapter': 'site.adapters.site_adapter',
+            'adapter': 'website.adapters.website_adapter',
             'models': '',
         },
     },

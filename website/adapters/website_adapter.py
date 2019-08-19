@@ -3,10 +3,14 @@ from django.conf import settings
 from django.http import Http404, HttpResponseServerError, HttpResponse
 from common.response import json_response
 
+import logging
+logger = logging.getLogger("newt." + __name__)
+
 def get_data_info(path,username,dirid=None,n=None):
     logger.debug("Datamap")
 
     url = 'https://portal.nersc.gov/project/datamap/data-'+path+'-json.php?username='+username
+    logger.debug(url)
     if dirid is not None:
         url += '&dirid='+dirid
         if n is not None:
@@ -16,7 +20,7 @@ def get_data_info(path,username,dirid=None,n=None):
         response, content = conn.request(url, 'GET')
         httpstatus = int(response['status'])
 
-    except Exception, e:
+    except Exception as e:
         return HttpResponseServerError("Could not connect to REST Service")
 
     content_type='application/json'
