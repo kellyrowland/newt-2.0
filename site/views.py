@@ -12,23 +12,30 @@ site_adapter = import_module(settings.NEWT_CONFIG['ADAPTERS']['SITE']['adapter']
 
 # only needs username
 class DataUsageView(AuthJSONRestView):
-    def get(self, request, username):
+    def get(self, request):
         logger.debug("Entering %s:%s" % (self.__class__.__name__, __name__))
         path = 'mgt'
+        username = request.user.username
         return site_adapter.get_data_info(path, username=username)
 
 # needs username, directory, number of files
 class UserLargestFilesView(AuthJSONRestView):
-    def get(self, request, username, dirid=None, n=None):
+    def get(self, request):
         logger.debug("Entering %s:%s" % (self.__class__.__name__, __name__))
         path = 'user'
+        username = request.user.username
+        dirid = request.GET.get('dirid', '')
+        n = request.GET.get('n', None)
         return site_adapter.get_data_info(path, username=username, dirid=dirid, n=n)
 
 # needs username, directory, number of files
 class UserOldestFilesView(AuthJSONRestView):
-    def get(self, request, username, dirid=None, n=None):
+    def get(self, request):
         logger.debug("Entering %s:%s" % (self.__class__.__name__, __name__))
         path = 'user-oldest'
+        username = request.user.username
+        dirid = request.GET.get('dirid', '')
+        n = request.GET.get('n', None)
         return site_adapter.get_data_info(path, username=username, dirid=dirid, n=n)
 
 class ExtraSiteView(JSONRestView):
